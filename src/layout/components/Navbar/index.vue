@@ -1,9 +1,9 @@
 <!--
- * @Author: 陈诚
+ * @Author: E-Dreamer
  * @Date: 2021-09-06 09:21:52
- * @LastEditTime: 2021-09-07 14:00:00
- * @LastEditors: 陈诚
- * @Description:
+ * @LastEditTime: 2021-09-07 14:26:04
+ * @LastEditors: E-Dreamer
+ * @Description: 
 -->
 <template>
   <div class="navbar">
@@ -52,8 +52,8 @@
       </template>
 
       <el-dropdown
-        class="avatar-container right-menu-item hover-effect"
         trigger="click"
+        class="avatar-container right-menu-item hover-effect"
       >
         <div class="avatar-wrapper">
           <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" />

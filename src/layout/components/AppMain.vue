@@ -1,8 +1,8 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 09:45:44
- * @LastEditTime: 2021-09-07 13:45:19
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-07 15:12:08
+ * @LastEditors: E-Dreamer
  * @Description:
 -->
 <template>
@@ -18,8 +18,15 @@
 </template>
 
 <script>
+// import { computed } from "vue";
 export default {
   name: "AppMain",
+  setup() {
+    // const cachedViews = computed(() => {
+    //   return this.$store.state.tagsView.cachedViews;
+    // });
+    // return cachedViews;
+  },
   computed: {
     cachedViews() {
       return this.$store.state.tagsView.cachedViews;

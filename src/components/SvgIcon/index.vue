@@ -1,12 +1,12 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 09:14:53
- * @LastEditTime: 2021-09-06 09:16:50
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-07 14:54:55
+ * @LastEditors: E-Dreamer
  * @Description:
 -->
 <template>
-  <svg :class="svgClass" aria-hidden="true">
+  <svg :class="svgClass" aria-hidden="true" @click="$emit('click')">
     <use :xlink:href="iconName" />
   </svg>
 </template>
@@ -14,6 +14,7 @@
 <script>
 export default {
   inheritAttrs: false,
+  emits: ["click"],
   name: "SvgIcon",
   props: {
     iconClass: {

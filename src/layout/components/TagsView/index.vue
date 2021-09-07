@@ -1,8 +1,8 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 17:29:21
- * @LastEditTime: 2021-09-07 13:48:28
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-07 14:38:18
+ * @LastEditors: E-Dreamer
  * @Description: 
 -->
 <template>
@@ -49,7 +49,6 @@
 <script>
 import ScrollPane from "./ScrollPane";
 import path from "path";
-
 export default {
   components: { ScrollPane },
   data() {
@@ -69,13 +68,12 @@ export default {
       return this.$store.state.permission.routes;
     },
   },
-  watchEffect: {
+  watch: {
     $route() {
+      console.log("进来");
       this.addTags();
       this.moveToCurrentTag();
     },
-  },
-  watch: {
     visible(value) {
       if (value) {
         document.body.addEventListener("click", this.closeMenu);

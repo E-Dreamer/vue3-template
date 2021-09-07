@@ -1,8 +1,8 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 15:31:55
- * @LastEditTime: 2021-09-06 15:32:00
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-07 14:56:57
+ * @LastEditors: E-Dreamer
  * @Description: 
 -->
 <template>
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     click() {
-      if (!screenfull.enabled) {
+      if (!screenfull.isEnabled) {
         this.$message({
           message: "you browser can not work",
           type: "warning",
@@ -45,7 +45,7 @@ export default {
       this.isFullscreen = screenfull.isFullscreen;
     },
     init() {
-      if (screenfull.enabled) {
+      if (screenfull.isEnabled) {
         screenfull.on("change", this.change);
       }
     },

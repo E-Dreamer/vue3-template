@@ -1,8 +1,8 @@
 /*
  * @Author: 陈诚
  * @Date: 2021-09-06 09:20:05
- * @LastEditTime: 2021-09-07 13:57:47
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-07 15:00:30
+ * @LastEditors: E-Dreamer
  * @Description:
  */
 import store from "@/store";
@@ -11,7 +11,7 @@ const { body } = document;
 const WIDTH = 992; // refer to Bootstrap's responsive design
 
 export default {
-  watchEffect: {
+  watch: {
     $route(route) {
       console.log(route);
       if (this.device === "mobile" && this.sidebar.opened) {
