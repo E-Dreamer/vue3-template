@@ -1,7 +1,7 @@
 /*
  * @Author: 陈诚
  * @Date: 2021-07-28 14:07:18
- * @LastEditTime: 2021-09-06 16:29:51
+ * @LastEditTime: 2021-09-07 13:52:08
  * @LastEditors: 陈诚
  * @Description:
  */
@@ -32,6 +32,10 @@ module.exports = {
   //   },
   // },
   chainWebpack(config) {
+    // 解决
+    if (process.env.NODE_ENV === "development") {
+      config.resolve.alias.set("vue-i18n", "vue-i18n/dist/vue-i18n.cjs.js");
+    }
     if (process.env.NODE.ENV === "production") {
       console.log(config);
       // config.plugin("loadshReplace").use(new LodashModuleReplacementPlugin());

@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 09:21:52
- * @LastEditTime: 2021-09-06 16:43:19
+ * @LastEditTime: 2021-09-07 14:00:00
  * @LastEditors: 陈诚
  * @Description:
 -->
@@ -84,15 +84,19 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Screenfull from "@/components/Screenfull";
 import SizeSelect from "@/components/SizeSelect";
 import { mapGetters } from "vuex";
+import { CaretBottom } from "@element-plus/icons";
 export default {
   name: "Navbar",
-  components: { Hamburger, Breadcrumb, Screenfull, SizeSelect },
+  components: { Hamburger, Breadcrumb, Screenfull, SizeSelect, CaretBottom },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"]),
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
+    },
+    logout() {
+      console.log("退出登录");
     },
   },
 };

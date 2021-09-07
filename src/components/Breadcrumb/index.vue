@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 15:26:28
- * @LastEditTime: 2021-09-06 17:27:12
+ * @LastEditTime: 2021-09-07 13:57:29
  * @LastEditors: 陈诚
  * @Description: 
 -->
@@ -29,7 +29,7 @@ export default {
       levelList: null,
     };
   },
-  watch: {
+  watchEffect: {
     $route(route) {
       // if you go to the redirect page, do not update the breadcrumbs
       if (route.path.startsWith("/redirect/")) {

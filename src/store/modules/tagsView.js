@@ -1,7 +1,7 @@
 /*
  * @Author: 陈诚
  * @Date: 2021-09-06 15:29:10
- * @LastEditTime: 2021-09-07 11:28:29
+ * @LastEditTime: 2021-09-07 11:58:35
  * @LastEditors: 陈诚
  * @Description:
  */
@@ -24,7 +24,7 @@ const tagsView = {
     },
     ADD_CACHED_VIEW: (state, view) => {
       if (state.cachedViews.includes(view.name)) return;
-      if (!view.meta.keepAlive) {
+      if (view.meta.keepAlive) {
         state.cachedViews.push(view.name);
       }
     },
