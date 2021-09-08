@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body,
+    html {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+    }
+
+    .app-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      *zoom: 1;
+    }
+
+    .app-wrapper::after {
+      clear: both;
+      content: '';
+      display: table;
+    }
+
+    aside {
+      height: 100%;
+      width: 200px;
+      background: #4186bd;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1001;
+      transition: width 0.28s;
+    }
+
+    .main-container {
+      position: relative;
+      margin-left: 200px;
+      height: 100%;
+      transition: margin 0.28s;
+    }
+
+    .fixed-header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 9;
+      width: calc(100% - 200px);
+      transition: width 0.28s;
+    }
+
+    nav {
+      height: 50px;
+      background: rgb(42, 161, 142);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+    }
+
+    .tags {
+      height: 30px;
+      background: rgb(93, 45, 97);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content {
+      min-height: calc(100vh - 80px);
+      /* height:100vh; */
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px;
+    }
+
+    .drawer-bg {
+      background: #000;
+      opacity: 0.5;
+      width: 100%;
+      top: 0;
+      height: 100%;
+      position: absolute;
+      z-index: -1;
+    }
+
+    /* 收起的样式 */
+    .hidesidebar aside {
+      width: 54px;
+    }
+
+    .hidesidebar .main-container {
+      margin-left: 54px;
+    }
+
+    .hidesidebar .fixed-header {
+      width: calc(100% - 54px);
+    }
+
+    /* mobile下面的样式 */
+    .mobile aside {
+      transform: translate3d(-200px, 0, 0);
+    }
+    .mobile.openside aside {
+      transform: none;
+    }
+
+    .mobile .main-container {
+      margin-left: 0;
+      transform: none !important;
+    }
+
+    .mobile .fixed-header {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-wrapper" id='wrapper'>
+    <div id='drawer' />
+    <aside>
+      侧边栏
+    </aside>
+
+    <div class="main-container">
+      <header class="fixed-header">
+        <nav>nav
+          <button id='btn'>折叠</button>
+        </nav>
+        <div class="tags">tags</div>
+      </header>
+
+      <div class="content">content</div>
+    </div>
+  </div>
+</body>
+<script>
+  let device = 'desktop'
+
+  let dom = document.querySelector('#wrapper')
+  let drawer = document.querySelector('#drawer');
+  document.querySelector('#btn').addEventListener('click', function () {
+    const copyclass = dom.className;
+    if (device === 'mobile') {
+      drawer.className = 'drawer-bg'
+    }
+    if (!dom.className.includes('hidesidebar')) {
+      dom.className = copyclass + ' hidesidebar'
+    } else {
+      device === 'mobile' ? dom.className = 'app-wrapper mobile openside' :  dom.className = 'app-wrapper' 
+    }
+  })
+
+  function taggleMobileClass() {
+    const copyclass = dom.className;
+    if (device === 'mobile') {
+      if (!dom.className.includes('mobile')) {
+        dom.className = copyclass + ' mobile hidesidebar'
+      }
+    } else {
+      dom.className = 'app-wrapper hidesidebar'
+      drawer.className = ''
+    }
+
+  }
+
+
+
+  const {
+    body
+  } = document;
+  const WIDTH = 992;
+  window.addEventListener("resize", resizeHandle);
+
+  resizeHandle();
+
+  function isMobile() {
+    const rect = body.getBoundingClientRect();
+    return rect.width - 1 < WIDTH;
+  }
+
+  function resizeHandle() {
+    if (!document.hidden) {
+      const ismobile = isMobile();
+      device = ismobile ? 'mobile' : 'desktop'
+      taggleMobileClass()
+    }
+  }
+</script>
+
+</html>

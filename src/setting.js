@@ -1,8 +1,8 @@
 /*
  * @Author: 陈诚
  * @Date: 2021-09-06 10:44:02
- * @LastEditTime: 2021-09-06 14:39:54
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-08 09:04:55
+ * @LastEditors: E-Dreamer
  * @Description:
  */
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether fix the header
    */
-  fixedHeader: false,
+  fixedHeader: true,
 
   /**
    * @type {boolean} true | false
