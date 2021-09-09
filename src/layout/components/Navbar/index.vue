@@ -1,7 +1,7 @@
 <!--
  * @Author: E-Dreamer
  * @Date: 2021-09-06 09:21:52
- * @LastEditTime: 2021-09-07 14:26:04
+ * @LastEditTime: 2021-09-09 15:45:48
  * @LastEditors: E-Dreamer
  * @Description: 
 -->
@@ -83,21 +83,34 @@ import Hamburger from "@/components/Hamburger";
 import Breadcrumb from "@/components/Breadcrumb";
 import Screenfull from "@/components/Screenfull";
 import SizeSelect from "@/components/SizeSelect";
-import { mapGetters } from "vuex";
 import { CaretBottom } from "@element-plus/icons";
+import { toRefs, reactive, computed } from "vue";
+import { useStore } from "vuex";
 export default {
   name: "Navbar",
   components: { Hamburger, Breadcrumb, Screenfull, SizeSelect, CaretBottom },
-  computed: {
-    ...mapGetters(["sidebar", "avatar", "device"]),
-  },
-  methods: {
-    toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
-    },
-    logout() {
-      console.log("退出登录");
-    },
+  setup() {
+    const store = useStore();
+    const state = reactive({
+      sidebar: computed(() => {
+        return store.getters.sidebar;
+      }),
+      avatar: computed(() => {
+        return store.getters.avatar;
+      }),
+      device: computed(() => {
+        return store.getters.device;
+      }),
+      toggleSideBar: () => {
+        store.dispatch("app/toggleSideBar");
+      },
+      logout: () => {
+        console.log("退出登录");
+      },
+    });
+    return {
+      ...toRefs(state),
+    };
   },
 };
 </script>

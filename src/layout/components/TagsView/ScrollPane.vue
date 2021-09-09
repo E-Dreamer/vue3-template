@@ -1,8 +1,8 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 17:28:21
- * @LastEditTime: 2021-09-07 11:37:53
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-09 17:03:28
+ * @LastEditors: E-Dreamer
  * @Description: 
 -->
 <template>
@@ -17,80 +17,93 @@
 </template>
 
 <script>
+import {
+  computed,
+  reactive,
+  toRefs,
+  getCurrentInstance,
+  onMounted,
+  onBeforeUnmount,
+} from "vue";
+
 const tagAndTagSpacing = 4; // tagAndTagSpacing
 
 export default {
   name: "ScrollPane",
-  data() {
-    return {
+  setup(props, context) {
+    const In = getCurrentInstance();
+    const scrollWrapper = computed(() => {
+      return In.refs.scrollContainer.$refs.wrap;
+    });
+    const state = reactive({
       left: 0,
-    };
-  },
-  computed: {
-    scrollWrapper() {
-      return this.$refs.scrollContainer.$refs.wrap;
-    },
-  },
-  mounted() {
-    this.scrollWrapper.addEventListener("scroll", this.emitScroll, true);
-  },
-  beforeUnmount() {
-    this.scrollWrapper.removeEventListener("scroll", this.emitScroll);
-  },
-  methods: {
-    handleScroll(e) {
-      const eventDelta = e.wheelDelta || -e.deltaY * 40;
-      const $scrollWrapper = this.scrollWrapper;
-      $scrollWrapper.scrollLeft = $scrollWrapper.scrollLeft + eventDelta / 4;
-    },
-    emitScroll() {
-      this.$emit("scroll");
-    },
-    moveToTarget(currentTag) {
-      console.log(currentTag);
-      const $container = this.$refs.scrollContainer.$el;
-      const $containerWidth = $container.offsetWidth;
-      const $scrollWrapper = this.scrollWrapper;
-      const tagList = this.$parent.$refs.tag;
+      handleScroll(e) {
+        const eventDelta = e.wheelDelta || -e.deltaY * 40;
+        const $scrollWrapper = scrollWrapper;
+        $scrollWrapper.scrollLeft = $scrollWrapper.scrollLeft + eventDelta / 4;
+      },
+      emitScroll: () => {
+        context.$emit("scroll");
+      },
 
-      let firstTag = null;
-      let lastTag = null;
+      moveToTarget(currentTag) {
+        const $container = In.refs.scrollContainer.$el;
+        const $containerWidth = $container.offsetWidth;
+        const $scrollWrapper = scrollWrapper;
+        const tagList = In.parent.refs.tag;
+        console.log(tagList);
 
-      // find first tag and last tag
-      if (tagList.length > 0) {
-        firstTag = tagList[0];
-        lastTag = tagList[tagList.length - 1];
-      }
+        let firstTag = null;
+        let lastTag = null;
 
-      if (firstTag === currentTag) {
-        $scrollWrapper.scrollLeft = 0;
-      } else if (lastTag === currentTag) {
-        $scrollWrapper.scrollLeft =
-          $scrollWrapper.scrollWidth - $containerWidth;
-      } else {
-        // find preTag and nextTag
-        const currentIndex = tagList.findIndex((item) => item === currentTag);
-        const prevTag = tagList[currentIndex - 1];
-        const nextTag = tagList[currentIndex + 1];
-
-        // the tag's offsetLeft after of nextTag
-        const afterNextTagOffsetLeft =
-          nextTag.$el.offsetLeft + nextTag.$el.offsetWidth + tagAndTagSpacing;
-
-        // the tag's offsetLeft before of prevTag
-        const beforePrevTagOffsetLeft =
-          prevTag.$el.offsetLeft - tagAndTagSpacing;
-
-        if (
-          afterNextTagOffsetLeft >
-          $scrollWrapper.scrollLeft + $containerWidth
-        ) {
-          $scrollWrapper.scrollLeft = afterNextTagOffsetLeft - $containerWidth;
-        } else if (beforePrevTagOffsetLeft < $scrollWrapper.scrollLeft) {
-          $scrollWrapper.scrollLeft = beforePrevTagOffsetLeft;
+        // find first tag and last tag
+        if (tagList.length > 0) {
+          firstTag = tagList[0];
+          lastTag = tagList[tagList.length - 1];
         }
-      }
-    },
+
+        if (firstTag === currentTag) {
+          $scrollWrapper.scrollLeft = 0;
+        } else if (lastTag === currentTag) {
+          $scrollWrapper.scrollLeft =
+            $scrollWrapper.scrollWidth - $containerWidth;
+        } else {
+          // find preTag and nextTag
+          const currentIndex = tagList.findIndex((item) => item === currentTag);
+          const prevTag = tagList[currentIndex - 1];
+          const nextTag = tagList[currentIndex + 1];
+
+          // the tag's offsetLeft after of nextTag
+          const afterNextTagOffsetLeft =
+            nextTag.$el.offsetLeft + nextTag.$el.offsetWidth + tagAndTagSpacing;
+
+          // the tag's offsetLeft before of prevTag
+          const beforePrevTagOffsetLeft =
+            prevTag.$el.offsetLeft - tagAndTagSpacing;
+
+          if (
+            afterNextTagOffsetLeft >
+            $scrollWrapper.scrollLeft + $containerWidth
+          ) {
+            $scrollWrapper.scrollLeft =
+              afterNextTagOffsetLeft - $containerWidth;
+          } else if (beforePrevTagOffsetLeft < $scrollWrapper.scrollLeft) {
+            $scrollWrapper.scrollLeft = beforePrevTagOffsetLeft;
+          }
+        }
+      },
+    });
+
+    onMounted(() => {
+      scrollWrapper.value.addEventListener("scroll", state.emitScroll, true);
+    });
+    onBeforeUnmount(() => {
+      scrollWrapper.value.removeEventListener("scroll", state.emitScroll);
+    });
+    return {
+      ...toRefs(state),
+      scrollWrapper,
+    };
   },
 };
 </script>

@@ -1,8 +1,8 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 09:20:23
- * @LastEditTime: 2021-09-07 10:29:31
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-09 16:17:34
+ * @LastEditors: E-Dreamer
  * @Description:
 -->
 <template>
@@ -31,47 +31,47 @@
 
 <script>
 import variables from "@/styles/variables.scss";
-import { defineComponent } from "vue";
+import { computed } from "vue";
 import Logo from "./Logo.vue";
 import FixiOSBug from "./FixiOSBug";
-import { mapGetters } from "vuex";
+import { useStore } from "vuex";
 import SidebarItem from "../Sidebar/sidebarItem.vue";
-export default defineComponent({
-  setup() {
-    const handleOpen = (key, keyPath) => {
-      console.log(key, keyPath);
-    };
-    const handleClose = (key, keyPath) => {
-      console.log(key, keyPath);
-    };
-
-    return {
-      handleOpen,
-      handleClose,
-    };
-  },
+import { useRoute } from "vue-router";
+export default {
   components: { Logo, SidebarItem },
-  computed: {
-    ...mapGetters(["sidebar", "routes"]),
-    activeMenu() {
-      const route = this.$route;
+  mixins: [FixiOSBug],
+  setup() {
+    const store = useStore();
+    const currentRoute = useRoute();
+    const sidebar = computed(() => {
+      return store.getters.sidebar;
+    });
+    const routes = computed(() => {
+      return store.getters.routes;
+    });
+    const activeMenu = computed(() => {
+      const route = currentRoute;
       const { meta, path } = route;
       // if set path, the sidebar will highlight the path you set
       if (meta.activeMenu) {
         return meta.activeMenu;
       }
       return path;
-    },
-    variables() {
-      return variables;
-    },
-    isCollapse() {
-      return !this.sidebar.opened;
-    },
-    showLogo() {
-      return this.$store.state.settings.sidebarLogo;
-    },
+    });
+    const isCollapse = computed(() => {
+      return !sidebar.value.opened;
+    });
+    const showLogo = computed(() => {
+      return store.state.settings.sidebarLogo;
+    });
+    return {
+      sidebar,
+      routes,
+      activeMenu,
+      variables,
+      isCollapse,
+      showLogo,
+    };
   },
-  mixins: [FixiOSBug],
-});
+};
 </script>

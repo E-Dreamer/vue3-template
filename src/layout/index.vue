@@ -1,8 +1,8 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 09:11:15
- * @LastEditTime: 2021-09-07 11:14:57
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-09 16:33:04
+ * @LastEditors: E-Dreamer
  * @Description:
 -->
 <template>
@@ -23,35 +23,63 @@
   </div>
 </template>
 <script>
-import { Sidebar, Navbar, TagsView, AppMain } from "./components";
-
-import { mapState } from "vuex";
-import ResizeMixin from "./mixin/ResizeHandler";
+import { computed, onBeforeMount, onBeforeUnmount, onMounted } from "vue";
+import { useStore } from "vuex";
+import { Navbar, Sidebar, AppMain, TagsView } from "./components/index";
+import resize from "./mixin/ResizeHandler";
 export default {
+  components: { Navbar, Sidebar, AppMain, TagsView },
   name: "Layout",
-  components: { Sidebar, Navbar, TagsView, AppMain },
-  mixins: [ResizeMixin],
-  computed: {
-    ...mapState({
-      sidebar: (state) => state.app.sidebar,
-      device: (state) => state.app.device,
-      showSettings: (state) => state.settings.showSettings,
-      needTagsView: (state) => state.settings.tagsView,
-      fixedHeader: (state) => state.settings.fixedHeader,
-    }),
-    classObj() {
+  setup() {
+    const {
+      sidebar,
+      device,
+      resizeMounted,
+      addEventListenerOnResize,
+      removeEventListenerResize,
+      watchRouter,
+    } = resize();
+    const store = useStore();
+    const classObj = computed(() => {
       return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === "mobile",
+        hideSidebar: !sidebar.value.opened,
+        openSidebar: sidebar.value.opened,
+        mobile: device.value === "mobile",
+        withoutAnimation: sidebar.value.withoutAnimation,
       };
-    },
-  },
-  methods: {
-    handleClickOutside() {
-      this.$store.dispatch("app/closeSideBar", { withoutAnimation: false });
-    },
+    });
+    const fixedHeader = computed(() => {
+      return store.state.settings.fixedHeader;
+    });
+    const needTagsView = computed(() => {
+      return store.state.settings.tagsView;
+    });
+    watchRouter;
+    const hasTagsView = computed(() => {
+      return store.state.settings.hasTagsView;
+    });
+    function handleClickOutside() {
+      store.dispatch("app/closeSideBar");
+      store.dispatch("app/toggleAnimation", { withoutAnimation: false });
+    }
+    onBeforeMount(() => {
+      addEventListenerOnResize();
+    });
+    onMounted(() => {
+      resizeMounted();
+    });
+    onBeforeUnmount(() => {
+      removeEventListenerResize();
+    });
+    return {
+      classObj,
+      fixedHeader,
+      device,
+      sidebar,
+      handleClickOutside,
+      hasTagsView,
+      needTagsView,
+    };
   },
 };
 </script>

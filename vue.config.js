@@ -1,8 +1,8 @@
 /*
  * @Author: 陈诚
  * @Date: 2021-07-28 14:07:18
- * @LastEditTime: 2021-09-07 13:52:08
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-09 10:50:45
+ * @LastEditors: E-Dreamer
  * @Description:
  */
 const path = require("path");
@@ -14,23 +14,23 @@ const CompressionPlugin = require("compression-webpack-plugin");
 // const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 module.exports = {
   publicPath: "./",
-  // css: {
-  //   loaderOptions: {
-  //     postcss: {
-  //       autoprefixer: {
-  //         browsers: ["Android >= 4.0", "iOS >=7"],
-  //       },
-  //       plugins: [
-  //         require("postcss-pxtorem")({
-  //           // 把px单位换算成rem单位
-  //           rootValue: 75, // 换算的基数(设计图750的根字体为75)
-  //           // selectorBlackList: ['weui', 'mu'], // 忽略转换正则匹配项
-  //           propList: ["*"],
-  //         }),
-  //       ],
-  //     },
-  //   },
-  // },
+  css: {
+    // loaderOptions: {
+    //   postcss: {
+    //     autoprefixer: {
+    //       browsers: ["Android >= 4.0", "iOS >=7"],
+    //     },
+    //     plugins: [
+    //       require("postcss-pxtorem")({
+    //         // 把px单位换算成rem单位
+    //         rootValue: 128, // 换算的基数(设计图750的根字体为75)
+    //         // selectorBlackList: ['weui', 'mu'], // 忽略转换正则匹配项
+    //         propList: ["*"],
+    //       }),
+    //     ],
+    //   },
+    // },
+  },
   chainWebpack(config) {
     // 解决
     if (process.env.NODE_ENV === "development") {

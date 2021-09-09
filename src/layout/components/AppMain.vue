@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 09:45:44
- * @LastEditTime: 2021-09-07 15:12:08
+ * @LastEditTime: 2021-09-09 16:18:41
  * @LastEditors: E-Dreamer
  * @Description:
 -->
@@ -18,22 +18,25 @@
 </template>
 
 <script>
-// import { computed } from "vue";
+import { computed, reactive, toRefs } from "vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+
 export default {
-  name: "AppMain",
   setup() {
-    // const cachedViews = computed(() => {
-    //   return this.$store.state.tagsView.cachedViews;
-    // });
-    // return cachedViews;
-  },
-  computed: {
-    cachedViews() {
-      return this.$store.state.tagsView.cachedViews;
-    },
-    key() {
-      return this.$route.path;
-    },
+    const store = useStore();
+    const route = useRoute();
+    const state = reactive({
+      cachedViews: computed(() => {
+        return store.getters.cachedViews;
+      }),
+      key: computed(() => {
+        return route.path;
+      }),
+    });
+    return {
+      ...toRefs(state),
+    };
   },
 };
 </script>

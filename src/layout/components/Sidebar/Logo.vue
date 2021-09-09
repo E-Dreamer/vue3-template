@@ -1,8 +1,8 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 09:24:10
- * @LastEditTime: 2021-09-06 15:36:53
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-09 16:10:01
+ * @LastEditors: E-Dreamer
  * @Description:
 -->
 <template>
@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { reactive, computed, toRefs } from "vue";
+import { useStore } from "vuex";
 export default {
   name: "SidebarLogo",
   props: {
@@ -37,11 +38,19 @@ export default {
       required: true,
     },
   },
-  computed: {
-    ...mapState({
-      title: (state) => state.settings.logoTitle,
-      logoImg: (state) => state.settings.logoImg,
-    }),
+  setup() {
+    const store = useStore();
+    const state = reactive({
+      title: computed(() => {
+        return store.state.settings.logoTitle;
+      }),
+      logoImg: computed(() => {
+        return store.state.settings.logoImg;
+      }),
+    });
+    return {
+      ...toRefs(state),
+    };
   },
 };
 </script>

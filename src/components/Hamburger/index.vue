@@ -1,8 +1,8 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-03 15:45:16
- * @LastEditTime: 2021-09-07 14:19:52
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-09 15:48:10
+ * @LastEditors: E-Dreamer
  * @Description:
 -->
 <template>
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  emits: ["toggleClick"],
+  // emits: ["toggleClick"],
   name: "Hamburger",
   props: {
     isActive: {
@@ -32,10 +32,13 @@ export default {
       default: false,
     },
   },
-  methods: {
-    toggleClick() {
-      this.$emit("toggleClick");
-    },
+  setup(props, context) {
+    const toggleClick = () => {
+      context.emit("toggleClick");
+    };
+    return {
+      toggleClick,
+    };
   },
 };
 </script>

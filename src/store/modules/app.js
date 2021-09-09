@@ -1,8 +1,8 @@
 /*
- * @Author: 陈诚
+ * @Author: E-Dreamer
  * @Date: 2021-09-06 09:53:22
- * @LastEditTime: 2021-09-06 14:40:20
- * @LastEditors: 陈诚
+ * @LastEditTime: 2021-09-09 16:30:43
+ * @LastEditors: E-Dreamer
  * @Description:
  */
 import Cookies from "js-cookie";
@@ -31,9 +31,12 @@ const app = {
       }
     },
     // 关闭侧边栏
-    CLOSE_SIDEBAR: (state, withoutAnimation) => {
+    CLOSE_SIDEBAR: (state) => {
       Cookies.set("sidebarStatus", 0);
       state.sidebar.opened = false;
+    },
+    // 是否添加transition
+    TOGGOLE_WITHOUTANIMATION(state, withoutAnimation) {
       state.sidebar.withoutAnimation = withoutAnimation;
     },
     // 切换信息
@@ -49,8 +52,11 @@ const app = {
     toggleSideBar({ commit }) {
       commit("TOGGLE_SIDEBAR");
     },
-    closeSideBar({ commit }, { withoutAnimation }) {
-      commit("CLOSE_SIDEBAR", withoutAnimation);
+    closeSideBar({ commit }) {
+      commit("CLOSE_SIDEBAR");
+    },
+    toggleAnimation({ commit }, { withoutAnimation }) {
+      commit("TOGGOLE_WITHOUTANIMATION", withoutAnimation);
     },
     toggleDevice({ commit }, device) {
       commit("TOGGLE_DEVICE", device);

@@ -1,54 +1,70 @@
 /*
- * @Author: 陈诚
- * @Date: 2021-09-06 09:20:05
- * @LastEditTime: 2021-09-07 15:00:30
+ * @Author: E-Dreamer
+ * @Date: 2021-09-08 17:18:21
+ * @LastEditTime: 2021-09-09 16:26:26
  * @LastEditors: E-Dreamer
  * @Description:
  */
+
 import store from "@/store";
+import { computed, watch } from "vue";
+import { useRoute } from "vue-router";
 
-const { body } = document;
-const WIDTH = 992; // refer to Bootstrap's responsive design
+const WIDTH = 992;
 
-export default {
-  watch: {
-    $route(route) {
-      console.log(route);
-      if (this.device === "mobile" && this.sidebar.opened) {
-        store.dispatch("app/closeSideBar", { withoutAnimation: false });
+export default function () {
+  const sidebar = computed(() => {
+    return store.getters.sidebar;
+  });
+  const device = computed(() => {
+    return store.getters.device;
+  });
+
+  const isMobile = () => {
+    const rect = document.body.getBoundingClientRect();
+    return rect.width - 1 < WIDTH;
+  };
+  const currentRoute = useRoute();
+  const watchRouter = watch(
+    () => currentRoute.name,
+    () => {
+      if (device.value === "mobile" && sidebar.value.opened) {
+        store.dispatch("app/closeSideBar");
+        store.dispatch("app/toggleAnimation", { withoutAnimation: true });
       }
-    },
-  },
-  beforeMount() {
-    window.addEventListener("resize", this.$_resizeHandler);
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.$_resizeHandler);
-  },
-  mounted() {
-    const isMobile = this.$_isMobile();
-    if (isMobile) {
-      store.dispatch("app/toggleDevice", "mobile");
-      store.dispatch("app/closeSideBar", { withoutAnimation: true });
     }
-  },
-  methods: {
-    // use $_ for mixins properties
-    // https://vuejs.org/v2/style-guide/index.html#Private-property-names-essential
-    $_isMobile() {
-      const rect = body.getBoundingClientRect();
-      return rect.width - 1 < WIDTH;
-    },
-    $_resizeHandler() {
-      // document.hidden 页面是否隐藏
-      if (!document.hidden) {
-        const isMobile = this.$_isMobile();
-        store.dispatch("app/toggleDevice", isMobile ? "mobile" : "desktop");
+  );
+  const resizeMounted = () => {
+    if (isMobile()) {
+      store.dispatch("app/toggleDevice", "mobile");
+      store.dispatch("app/closeSideBar");
+      store.dispatch("app/toggleAnimation", { withoutAnimation: true });
+    }
+  };
 
-        if (isMobile) {
-          store.dispatch("app/closeSideBar", { withoutAnimation: true });
-        }
-      }
-    },
-  },
-};
+  const resizeHandler = () => {
+    // document.hidden 页面是否隐藏
+    if (!document.hidden) {
+      const flag = isMobile();
+      store.dispatch("app/toggleDevice", flag ? "mobile" : "desktop");
+      store.dispatch("app/closeSideBar");
+      store.dispatch("app/toggleAnimation", { withoutAnimation: true });
+    }
+  };
+  const addEventListenerOnResize = () => {
+    window.addEventListener("resize", resizeHandler);
+  };
+
+  const removeEventListenerResize = () => {
+    window.removeEventListener("resize", resizeHandler);
+  };
+
+  return {
+    sidebar,
+    device,
+    resizeMounted,
+    addEventListenerOnResize,
+    removeEventListenerResize,
+    watchRouter,
+  };
+}

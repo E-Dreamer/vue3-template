@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈诚
  * @Date: 2021-09-06 15:31:55
- * @LastEditTime: 2021-09-07 14:56:57
+ * @LastEditTime: 2021-09-09 16:00:13
  * @LastEditors: E-Dreamer
  * @Description: 
 -->
@@ -15,45 +15,48 @@
 </template>
 
 <script>
+import { onBeforeMount, onBeforeUnmount, reactive, toRefs } from "vue";
 import screenfull from "screenfull";
 
 export default {
   name: "Screenfull",
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       isFullscreen: false,
+      click: () => {
+        if (!screenfull.isEnabled) {
+          this.$message({
+            message: "you browser can not work",
+            type: "warning",
+          });
+          return false;
+        }
+        screenfull.toggle();
+      },
+      change: () => {
+        state.isFullscreen = screenfull.isFullscreen;
+      },
+      init: () => {
+        if (screenfull.isEnabled) {
+          screenfull.on("change", state.change);
+        }
+      },
+      destroy: () => {
+        if (screenfull.enabled) {
+          screenfull.off("change", state.change);
+        }
+      },
+    });
+
+    onBeforeMount(() => {
+      state.init();
+    });
+    onBeforeUnmount(() => {
+      state.destroy();
+    });
+    return {
+      ...toRefs(state),
     };
-  },
-  mounted() {
-    this.init();
-  },
-  beforeUnmount() {
-    this.destroy();
-  },
-  methods: {
-    click() {
-      if (!screenfull.isEnabled) {
-        this.$message({
-          message: "you browser can not work",
-          type: "warning",
-        });
-        return false;
-      }
-      screenfull.toggle();
-    },
-    change() {
-      this.isFullscreen = screenfull.isFullscreen;
-    },
-    init() {
-      if (screenfull.isEnabled) {
-        screenfull.on("change", this.change);
-      }
-    },
-    destroy() {
-      if (screenfull.enabled) {
-        screenfull.off("change", this.change);
-      }
-    },
   },
 };
 </script>
